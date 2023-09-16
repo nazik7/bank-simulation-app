@@ -7,6 +7,7 @@ import com.cydeo.exception.BalanceNotSufficientException;
 import com.cydeo.model.Account;
 import com.cydeo.model.Transaction;
 import com.cydeo.repository.AccountRepository;
+import com.cydeo.repository.TransactionRepository;
 import com.cydeo.service.TransactionService;
 import org.apache.catalina.filters.AddDefaultCharsetFilter;
 import org.springframework.stereotype.Component;
@@ -18,9 +19,11 @@ import java.util.UUID;
 @Component
 public class TransactionServiceImpl implements TransactionService {
     private final AccountRepository accountRepository;
+    private final TransactionRepository transactionRepository;
 
-    public TransactionServiceImpl(AccountRepository accountRepository) {
+    public TransactionServiceImpl(AccountRepository accountRepository,TransactionRepository transactionRepository) {
         this.accountRepository = accountRepository;
+        this.transactionRepository = transactionRepository;
     }
 
     @Override
@@ -33,7 +36,10 @@ public class TransactionServiceImpl implements TransactionService {
          */
         validateAccount(sender, receiver);
         checkAccountOwnership(sender, receiver);
-        return null;
+        executeBalanceAndUpdateIfRequired(amount,sender,receiver);
+        Transaction transaction = Transaction.builder().amount(amount).sender(sender.getId())
+                .receiver(receiver.getId()).createDate(creationDate).message(message).build();
+        return transactionRepository.save(transaction);
 
     }
     private void validateAccount(Account sender, Account receiver){
