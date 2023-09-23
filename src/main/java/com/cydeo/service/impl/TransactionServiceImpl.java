@@ -10,7 +10,6 @@ import com.cydeo.model.Transaction;
 import com.cydeo.repository.AccountRepository;
 import com.cydeo.repository.TransactionRepository;
 import com.cydeo.service.TransactionService;
-import org.apache.catalina.filters.AddDefaultCharsetFilter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -42,6 +41,7 @@ public class TransactionServiceImpl implements TransactionService {
             validateAccount(sender, receiver);
             checkAccountOwnership(sender, receiver);
             executeBalanceAndUpdateIfRequired(amount, sender, receiver);
+
             Transaction transaction = Transaction.builder().amount(amount).sender(sender.getId())
                     .receiver(receiver.getId()).createDate(creationDate).message(message).build();
             return transactionRepository.save(transaction);
@@ -64,7 +64,8 @@ public class TransactionServiceImpl implements TransactionService {
         if(sender.getId().equals(receiver.getId())){
             throw new BadRequestEXception("Sender account needs to be different than the receiver account");
         }
-        //findAccountById(id);
+        findAccountById(sender.getId());
+        findAccountById(receiver.getId());
 
     }
 
@@ -74,10 +75,14 @@ public class TransactionServiceImpl implements TransactionService {
 
     private void checkAccountOwnership(Account sender, Account receiver){
         //
-        if((sender.getAccountType().equals(AccountType.SAVING) ||
-                receiver.getAccountType().equals(AccountType.SAVING))&&
-        !sender.getUserId().equals(receiver.getUserId())){
-            throw new AccountOwnerShipException("Accounts must be the same");
+//        if((sender.getAccountType().equals(AccountType.SAVING) || receiver.getAccountType().equals(AccountType.SAVING))&&
+//        !sender.getUserId().equals(receiver.getUserId())){
+//            throw new AccountOwnerShipException("Accounts must be the same");
+//        }
+
+        if((sender.getAccountType().equals(AccountType.SAVING)||receiver.getAccountType().equals(AccountType.SAVING))
+                && !sender.getUserId().equals(receiver.getUserId())){
+            throw new AccountOwnerShipException("If one of the account is saving, user must be the same for sender and receiver");
         }
     }
     private void executeBalanceAndUpdateIfRequired(BigDecimal amount, Account sender, Account receiver){
