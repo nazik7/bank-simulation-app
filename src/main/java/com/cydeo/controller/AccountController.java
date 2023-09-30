@@ -18,4 +18,10 @@ public class AccountController {
         model.addAttribute("accountList",accountService.listAllAccount());
         return "account/index";
     }
+
+    @GetMapping("/create-account")
+    public String createAccount(Model model){
+        model.addAttribute("accountList",accountService.listAllAccount());
+        return "/account/create-account";
+    }
 }
