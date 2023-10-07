@@ -32,15 +32,13 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public void delete(UUID id) {
-        Account account = accountRepository.findById(id);
-        //set status to deleted
-        account.setAccountStatus(AccountStatus.DELETED);
+        accountRepository.findById(id).setAccountStatus(AccountStatus.DELETED);
     }
 
     @Override
     public void activate(UUID id) {
-        Account account = accountRepository.findById(id);
-        account.setAccountStatus(AccountStatus.ACTIVE);
+        accountRepository.findById(id).setAccountStatus(AccountStatus.ACTIVE);
+
     }
 
 }
