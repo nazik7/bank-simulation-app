@@ -17,6 +17,14 @@ public class AccountRepository {
         return account;
     }
 
+//    public void delete(UUID id){
+//        Account accountFound = accountList.stream()
+//                .filter(account -> account.getId()==id)
+//                .findFirst().get();
+//
+//        accountList.remove(accountFound);
+//    }
+
     public List<Account> findAll(){
         return accountList;
     }
