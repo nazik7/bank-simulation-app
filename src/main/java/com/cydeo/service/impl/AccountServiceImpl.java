@@ -21,7 +21,8 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public Account createNewAccount(BigDecimal balance, Date createDate, AccountType accountType, Long userId) {
         Account account = Account.builder().id(UUID.randomUUID()).userId(userId)
-                .balance(balance).creationDate(createDate).accountStatus(AccountStatus.ACTIVE).build();
+                .balance(balance).accountType(accountType).creationDate(createDate)
+                .accountStatus(AccountStatus.ACTIVE).build();
         return accountRepository.save(account);
     }
 
@@ -39,6 +40,11 @@ public class AccountServiceImpl implements AccountService {
     public void activate(UUID id) {
         accountRepository.findById(id).setAccountStatus(AccountStatus.ACTIVE);
 
+    }
+
+    @Override
+    public Account retrieveById(UUID id) {
+        return accountRepository.findById(id);
     }
 
 }

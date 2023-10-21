@@ -45,7 +45,6 @@ public class AccountController {
     public String createAccount(@ModelAttribute("account") Account account){
         //BigDecimal balance, Date createDate, AccountType accountType, Long userId
         accountService.createNewAccount(account.getBalance(),new Date(),account.getAccountType(),account.getUserId());
-        System.out.println(account);
         return "redirect:/index";
     }
 

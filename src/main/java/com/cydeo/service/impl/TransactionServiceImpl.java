@@ -14,9 +14,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
+
 @Component
 public class TransactionServiceImpl implements TransactionService {
     @Value("${under_construction}")
@@ -103,5 +106,10 @@ public class TransactionServiceImpl implements TransactionService {
     @Override
     public List<Transaction> findAllTransaction() {
         return transactionRepository.findAll();
+    }
+
+    @Override
+    public List<Transaction> last10Transactions() {
+        return transactionRepository.findLast10Transactions();
     }
 }
