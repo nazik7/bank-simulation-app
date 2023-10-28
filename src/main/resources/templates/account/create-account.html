@@ -20,12 +20,22 @@
                         <div class="row">
                             <div class="form-group blu-margin">
                                 <label for="userId" class="col-form-label">UserId</label>
-                                <input type="text" class="form-control" id="userId" placeholder="user id" th:field="*{userId}">
+                                <input type="text" class="form-control" id="userId" placeholder="user id" th:field="*{userId}" >
+                                <span th:if="${#fields.hasErrors('userId')}">
+                                    <ul class="alert-danger">
+                                        <li th:each="err: ${#fields.errors('userId')}" th:text="${err}"></li>
+                                    </ul>
+                                </span>
                             </div>
 
                             <div class="form-group blu-margin">
                                 <label for="balance" class="col-form-label">Balance</label>
                                 <input type="text" class="form-control" id="balance" placeholder="balance" th:field="*{balance}">
+                                <span th:if="${#fields.hasErrors('balance')}">
+                                    <ul class="alert-danger">
+                                        <li th:each="err: ${#fields.errors('balance')}" th:text="${err}"></li>
+                                    </ul>
+                                </span>
                             </div>
 
                             <div class="form-group blu-margin">
@@ -34,6 +44,11 @@
                                     <option value="0">Select Account </option>
                                     <option th:each="type: ${accountTypes}" th:text="${type.name()}" th:value="${type.name()}" ></option>
                                 </select>
+                                <span th:if="${#fields.hasErrors('accountType')}">
+                                    <ul class="alert-danger">
+                                        <li th:each="err: ${#fields.errors('accountType')}" th:text="${err}"></li>
+                                    </ul>
+                                </span>
                             </div>
                         </div>
                         <div class="row">
