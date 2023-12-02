@@ -6,7 +6,6 @@ import com.cydeo.dto.TransactionDTO;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 
 public interface TransactionService {
     TransactionDTO makeTransfer(AccountDTO sender, AccountDTO receiver, BigDecimal amount, Date creationDate, String message);
@@ -15,5 +14,5 @@ public interface TransactionService {
 
     List<TransactionDTO> last10Transactions();
 
-    List<TransactionDTO> findTransactionsById(UUID id);
+    List<TransactionDTO> findTransactionsById(Long id);
 }
