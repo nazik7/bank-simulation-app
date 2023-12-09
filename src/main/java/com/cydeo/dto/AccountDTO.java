@@ -29,6 +29,13 @@ public class AccountDTO {
     private Long userId;
 
     private AccountStatus accountStatus;
+
+    public AccountDTO(BigDecimal balance, AccountType accountType, Date creationDate, Long userId) {
+        this.balance = balance;
+        this.accountType = accountType;
+        this.creationDate = creationDate;
+        this.userId = userId;
+    }
 }
 
 
