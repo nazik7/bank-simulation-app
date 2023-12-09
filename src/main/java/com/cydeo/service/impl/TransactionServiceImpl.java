@@ -10,6 +10,7 @@ import com.cydeo.exception.UnderConstructionException;
 import com.cydeo.mapper.TransactionMapper;
 import com.cydeo.repository.AccountRepository;
 import com.cydeo.repository.TransactionRepository;
+import com.cydeo.service.AccountService;
 import com.cydeo.service.TransactionService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -23,13 +24,13 @@ import java.util.stream.Collectors;
 public class TransactionServiceImpl implements TransactionService {
     @Value("${under_construction}")
     private boolean underConstruction;
-    private final AccountRepository accountRepository;
+    private final AccountService accountService;
     private final TransactionRepository transactionRepository;
     private final TransactionMapper transactionMapper;
 
-    public TransactionServiceImpl(AccountRepository accountRepository,TransactionRepository transactionRepository
+    public TransactionServiceImpl(AccountService accountService,TransactionRepository transactionRepository
     ,TransactionMapper transactionMapper) {
-        this.accountRepository = accountRepository;
+        this.accountService= accountService;
         this.transactionRepository = transactionRepository;
         this.transactionMapper = transactionMapper;
     }
@@ -48,7 +49,8 @@ public class TransactionServiceImpl implements TransactionService {
             executeBalanceAndUpdateIfRequired(amount, sender, receiver);
 
             TransactionDTO transactionDTO = new TransactionDTO();
-            return transactionRepository.save(transactionMapper.convertToEntity(transactionDTO));
+            transactionRepository.save(transactionMapper.convertToEntity(transactionDTO));
+            return transactionDTO;
         }else{
             throw new UnderConstructionException("App is under construction, please try again later.");
         }
@@ -74,7 +76,7 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     private void findAccountById(Long id) {
-        accountRepository.findById(id);
+        accountService.retrieveById(id);
     }
 
     private void checkAccountOwnership(AccountDTO sender, AccountDTO receiver){
