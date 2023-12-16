@@ -48,7 +48,8 @@ public class TransactionServiceImpl implements TransactionService {
             checkAccountOwnership(sender, receiver);
             executeBalanceAndUpdateIfRequired(amount, sender, receiver);
 
-            TransactionDTO transactionDTO = new TransactionDTO();
+
+            TransactionDTO transactionDTO = new TransactionDTO(sender, receiver,amount,message, creationDate);
             transactionRepository.save(transactionMapper.convertToEntity(transactionDTO));
             return transactionDTO;
         }else{
@@ -95,6 +96,14 @@ public class TransactionServiceImpl implements TransactionService {
         if(checkSenderBalance(sender, amount)){
             sender.setBalance(sender.getBalance().subtract(amount));
             receiver.setBalance(receiver.getBalance().add(amount));
+            //get the
+            AccountDTO senderAcc = accountService.retrieveById(sender.getId());
+            senderAcc.setBalance(sender.getBalance());
+            accountService.updateAccount(sender);
+
+            AccountDTO receiverAcc = accountService.retrieveById(receiver.getId());
+            receiverAcc.setBalance(receiver.getBalance());
+            accountService.updateAccount(receiverAcc);
         }else{
             throw new BalanceNotSufficientException("Balance is not enough for transfer");
         }
@@ -115,12 +124,14 @@ public class TransactionServiceImpl implements TransactionService {
     @Override
     public List<TransactionDTO> last10Transactions() {
 
-        return transactionRepository.findLast10Transactions();
+        return transactionRepository.findLast10Transactions().stream()
+                .map(transactionMapper::convertToDto).collect(Collectors.toList());
     }
 
     @Override
     public List<TransactionDTO> findTransactionsById(Long id) {
 
-        return transactionRepository.findTransactionsById(id);
+        return transactionRepository.findTransactionListByAccountId(id).stream()
+                .map(transactionMapper::convertToDto).collect(Collectors.toList());
     }
 }

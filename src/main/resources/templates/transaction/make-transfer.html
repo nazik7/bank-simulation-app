@@ -82,8 +82,8 @@
                             </thead>
                             <tbody>
                                 <tr th:each="LTransaction:${lastTransactions}">
-                                    <td th:text="${LTransaction.getSender()}"></td>
-                                    <td th:text="${LTransaction.getReceiver()}"></td>
+                                    <td th:text="${LTransaction.getSender().id}"></td>
+                                    <td th:text="${LTransaction.getReceiver().id}"></td>
                                     <td th:text="${LTransaction.getAmount()}"></td>
                                     <td th:text="${LTransaction.getCreateDate()}"></td>
                                     <td th:text="${LTransaction.getMessage()}"></td>

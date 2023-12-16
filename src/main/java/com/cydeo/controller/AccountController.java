@@ -31,7 +31,7 @@ public class AccountController {
     @GetMapping("/create-form")
     public String getCreateAccount(Model model){
         //need to provide empty account object
-        model.addAttribute("account", new AccountDTO());
+        model.addAttribute("accountDTO", new AccountDTO());
         //need to provide account type enums to view(to user)
         model.addAttribute("accountTypes", AccountType.values());
         return "/account/create-account";
@@ -43,7 +43,7 @@ public class AccountController {
     //once user is created return back to index page
 
     @PostMapping("/create")
-    public String createAccount(@Valid @ModelAttribute("account") AccountDTO accountDTO, BindingResult bindingResult, Model model){
+    public String createAccount(@Valid @ModelAttribute("accountDTO") AccountDTO accountDTO, BindingResult bindingResult, Model model){
         if(bindingResult.hasErrors()){
             model.addAttribute("accountTypes", AccountType.values());
             return "/account/create-account";
